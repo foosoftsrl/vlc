@@ -1159,9 +1159,13 @@ static void Prepare(vout_display_t *vd, picture_t *picture,
     }
 }
 
+static int frameCtr = 0;
+
 static void Display(vout_display_t *vd, picture_t *picture,
                     subpicture_t *subpicture)
 {
+    frameCtr++;
+
     vout_display_sys_t *sys = vd->sys;
 
     if (sys->p_window->b_opaque)
@@ -1180,6 +1184,14 @@ static void Display(vout_display_t *vd, picture_t *picture,
 
     sys->b_displayed = true;
 }
+
+__attribute__((visibility("default")))
+extern int AndroidGetFrameCtr(void);
+
+__attribute__((visibility("default")))
+int AndroidGetFrameCtr() {
+    return frameCtr;
+}	
 
 static void CopySourceAspect(video_format_t *p_dest,
                              const video_format_t *p_src)
